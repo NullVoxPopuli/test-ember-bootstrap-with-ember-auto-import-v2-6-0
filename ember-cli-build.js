@@ -10,12 +10,12 @@ module.exports = function (defaults) {
     },
     autoImport: {
       // earlyBootSet: () => [], // no error
-      earlyBootSet: () => ['@glimmer/tracking'], // no error
+      // earlyBootSet: () => ['@glimmer/tracking'], // no error
       // earlyBootSet: () => ['@glimmer/component'], // error
       // earlyBootSet: () => ['@ember/service'], // error
       // earlyBootSet: () => ['@ember/controller'], // error
       // earlyBootSet: () => ['@ember/component'], // error
-      // earlyBootSet: () => ['@ember/routing/route'], // error
+      earlyBootSet: () => ['@ember/routing/route'], // error
     }
   });
 

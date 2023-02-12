@@ -1,0 +1,28 @@
+diff --git a/node_modules/ember-auto-import/js/webpack.js b/node_modules/ember-auto-import/js/webpack.js
+index 99bbc10..a0311f8 100644
+--- a/node_modules/ember-auto-import/js/webpack.js
++++ b/node_modules/ember-auto-import/js/webpack.js
+@@ -78,6 +78,10 @@ handlebars_1.registerHelper('js-string-escape', js_string_escape_1.default);
+ handlebars_1.registerHelper('join', function (list, connector) {
+     return list.join(connector);
+ });
++handlebars_1.registerHelper('is-in-ember-source', function (modulePath) {
++  // TODO: how to determine if ember-source has stopped bundling these?
++  return ['rsvp', '@glimmer/component', '@glimmer/tracking'].some(dep => modulePath.startsWith(dep));
++});
+ const entryTemplate = handlebars_1.compile(`
+ module.exports = (function(){
+   var d = _eai_d;
+@@ -95,7 +99,11 @@ module.exports = (function(){
+   };
+   d('__v1-addons__early-boot-set__', [{{{v1EmberDeps}}}], function() {});
+   {{#each staticImports as |module|}}
+-    d('{{js-string-escape module.specifier}}', ['__v1-addons__early-boot-set__'], function() { return require('{{js-string-escape module.specifier}}'); });
++    d('{{js-string-escape module.specifier}}', [
++      {{#unless (is-in-ember-source module.specifier)}}
++        '__v1-addons__early-boot-set__'
++      {{/unless}}
++    ], function() { return require('{{js-string-escape module.specifier}}'); });
+   {{/each}}
+   {{#each dynamicImports as |module|}}
+     d('_eai_dyn_{{js-string-escape module.specifier}}', [], function() { return import('{{js-string-escape module.specifier}}'); });
